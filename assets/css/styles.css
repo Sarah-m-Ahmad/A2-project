@@ -1,10 +1,31 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 20px;
+/* Import fonts */
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');   
+
+/* Define styling colours  */
+:root{
+  --font-main-color: #2D2D2D;
+  --header-footer-color: #555867;
+  --search-grey: #eaeaea;
+  --filter-fill:#CACFE3;
+  --chip:#D6D0FF;
+  --sort-text:#6148A8;
 }
-#output {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
+
+*{
+  font-size: 18px;
 }
+
+body{
+  font-family: 'SF Pro Display', sans-serif;   
+}
+
+header{
+    background-color: var(--header-footer-color);
+    color: white;
+    padding: 15px 0;
+    position:fixed;
+    width: 100%;
+    transition: 0.5s;
+    z-index: 10;
+}
+
