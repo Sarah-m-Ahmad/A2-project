@@ -1,31 +1,79 @@
 /* Import fonts */
-@import url('https://fonts.cdnfonts.com/css/sf-pro-display');   
+@import url("https://fonts.cdnfonts.com/css/sf-pro-display");
 
 /* Define styling colours  */
-:root{
-  --font-main-color: #2D2D2D;
+:root {
+  --font-main-color: #2d2d2d;
   --header-footer-color: #555867;
   --search-grey: #eaeaea;
-  --filter-fill:#CACFE3;
-  --chip:#D6D0FF;
-  --sort-text:#6148A8;
+  --filter-fill: #cacfe3;
+  --chip: #d6d0ff;
+  --sort-text: #6148a8;
+  --gap-1: 0.75rem;
+  --gap-2: 1rem;
+  --gap-3: 1.25rem;
+  --gap-4: 2rem;
 }
 
-*{
+/* Establish font size for responsiveness */
+* {
   font-size: 18px;
+  box-sizing: border-box;
 }
 
-body{
-  font-family: 'SF Pro Display', sans-serif;   
+html {
+  height: 100%;
 }
 
-header{
-    background-color: var(--header-footer-color);
+body {
+  font-family: "SF Pro Display", sans-serif;
+  color: var(--font-main-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Stop overscrolling */
+  overscroll-behavior: none;
+}
+
+/* Header styling */
+header {
+  background-color: var(--header-footer-color);
+  color: white;
+  /* position: absolute; */
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap-3) var(--gap-4);
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-1);
+  }
+  a {
+    text-decoration: none;
     color: white;
-    padding: 15px 0;
-    position:fixed;
-    width: 100%;
-    transition: 0.5s;
-    z-index: 10;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
+/* Footer styling */
+
+footer {
+  background-color: var(--header-footer-color);
+  color: white;
+  width: 100%;
+  padding: var(--gap-3) var(--gap-4);
+}
+
+.bottom-text {
+  padding-left: var(--gap-2);
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: white;
+}
