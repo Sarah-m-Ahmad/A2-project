@@ -39,18 +39,19 @@ function displayResults(results) {
               imgurl = baseurl + imgArr[i].thumbnailFilePath;
               break; // Use the first valid image
           }
-      }
+      }    
 
       // 1. Create a container for the item
       const itemContainer = document.createElement("div");
 
       // 2. Use template literals to embed the item details in HTML
       itemContainer.innerHTML = `
-          ${imgurl ? `<div class="imgContainer"><img src="${imgurl}" alt="${item.title}"></div>` : ""}
+          ${imgurl ? `<div class="object-item"><img src="${imgurl}" alt="${item.title}"></div>` : ""}
       `;
 
       // 3. Append the item container to the objects container
       objectsContainer.appendChild(itemContainer);
+
   });
 }
 
