@@ -82,51 +82,54 @@ main {
   padding: 0 var(--gap-4);
 }
 
-.grid {
-  margin: 0 auto;
+.column {
+  column-count: 5;
+  column-gap: var(--gap-1);
 }
 
-.grid-sizer,
-.grid-item {
-  width: 20%; /* 5 columns */
+.column-item img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
   margin-bottom: var(--gap-1);
+}
 
-  img {
-    display: block;
-    width: 100%;
-    border-radius: 8px;
+/* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) */
+.wide {
+  aspect-ratio: 1;
+  width: 100%;
+  object-fit: cover;
+  object-position: left; /* start at left */
+}
+
+.wide.in-view {
+  animation: panImage 60s linear forwards;
+  animation-play-state: running;
+}
+
+.wide.paused {
+  animation-play-state: paused;
+}
+
+@keyframes panImage {
+  from {
+    object-position: left;
+  }
+  to {
+    object-position: right;
   }
 }
 
-/* #objectsContainer {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: 25vh;
-  gap: var(--gap-1);
-} */
-
-/* .mosaic-item {
-  background: #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
-
-/* .mosaic-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-} */
-
-/* .wide {
-  grid-column: span 3;
+/* Responsive breakpoints */
+@media (max-width: 1000px) {
+  .column {
+    column-count: 3;
+  }
 }
-.tall {
-  grid-row: span 3;
+
+@media (max-width: 600px) {
+  .column {
+    column-count: 1; /* 📱 single column on mobile */
+  }
 }
-.big {
-  grid-column: span 3;
-  grid-row: span 3;
-} */
