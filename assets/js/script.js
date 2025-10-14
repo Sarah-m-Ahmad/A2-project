@@ -1,8 +1,31 @@
 // Global variables
 let cachedResults = [];
+let currentPage = 1;
+let currentQueryUrl = "";
+let limit = 25;
+
+// Intersection Observer to trigger pan effect when fully in view (GPT and Copilot assisted)
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.target.classList.contains("wide")) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          entry.target.classList.remove("paused");
+        } else {
+          entry.target.classList.add("paused");
+        }
+      }
+    });
+  },
+  { threshold: 1 }
+);
+
+//Overlay initially guard
+let overlayInitialized = false;
 
 // Function to fetch data from NFSA API
-function getData(url, callback) {
+function getData(url, callback, append = false) {
   fetch(url)
     .then((response) => {
       if (!response.ok) throw new Error("Network response was not ok");
@@ -12,7 +35,7 @@ function getData(url, callback) {
       if (callback) {
         callback(data);
       } else {
-        displayResults(data.results);
+        displayResults(data.results, append);
       }
     })
     .catch((error) => {
@@ -24,11 +47,17 @@ function getData(url, callback) {
 }
 
 // Function to display API results
-function displayResults(results) {
-  cachedResults = results; // Save current list so we can return to it
 
+function displayResults(results, append = false) {
   const objectsContainer = document.getElementById("objectsContainer"); // Ensure this exists in HTML
-  objectsContainer.innerHTML = ""; // Clear previous results
+
+  // Handle cache + clear
+  if (!append) {
+    cachedResults = results; // Save current list so we can return to it
+    document.getElementById("objectsContainer").innerHTML = ""; // Clear if not appending
+  } else {
+    cachedResults = cachedResults.concat(results); // Append new results to cache
+  }
 
   results.forEach((item) => {
     console.log("Item:", item); // Step to log each item
@@ -90,23 +119,6 @@ function displayResults(results) {
       }
     });
   });
-
-  // Intersection Observer to trigger pan effect when fully in view (GPT and Copilot assisted)
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.target.classList.contains("wide")) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            entry.target.classList.remove("paused");
-          } else {
-            entry.target.classList.add("paused");
-          }
-        }
-      });
-    },
-    { threshold: 1 }
-  );
 }
 
 // Function to show a single item when clicked -> modified to show overlay using chatGPT
@@ -136,11 +148,7 @@ function loadItemDetails(id) {
     overlayInner.innerHTML = `
       <h2>${title}</h2>
       <p>${name}</p>
-      ${
-        imgurl
-          ? `<img src="${imgurl}" alt="${title}" style="max-width:100%; height:auto;">`
-          : ""
-      }
+      ${imgurl ? `<img src="${imgurl}" alt="${title}">` : ""}
     `;
   });
 
@@ -171,37 +179,16 @@ function loadItemDetails(id) {
   document.addEventListener("keydown", handleKeyDown, { once: true });
 }
 
-// function loadItemDetails(id) {
-//   console.log("load item: " + id);
-//   const apiUrl = `https://api.collection.nfsa.gov.au/title/${id}`;
+// Adds functionality to the "More button to load more results"
 
-//   const outputDiv = document.getElementById("objectsContainer");
-//   outputDiv.innerHTML = "<p>Loading item details...</p>";
+document.getElementById("moreBtn").addEventListener("click", () => {
+  currentPage += 1;
+  const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
+  getData(nextUrl, null, true); // append = true
+});
 
-//   getData(apiUrl, (item) => {
-//     const title = item.title || "Untitled";
-//     const name = item.name || "";
-//     const preview = Array.isArray(item.preview) ? item.preview : [];
-//     const imgurl =
-//       preview.length > 0 && preview[0].filePath
-//         ? `https://media.nfsacollection.net/${preview[0].filePath}`
-//         : "";
-
-//     outputDiv.innerHTML = `
-//       <button id="backBtn">Back</button>
-//       <h2>${title}</h2>
-//       <p>${name}</p>
-//       ${imgurl ? `<img src="${imgurl}" alt="${title}">` : ""}
-//     `;
-
-//     document.getElementById("backBtn").addEventListener("click", () => {
-//       displayResults(cachedResults); // Just re-render the stored results
-//     });
-//   });
-// }
-
-// Call getData with NFSA API URL
-
-getData(
-  "https://api.collection.nfsa.gov.au/search?query=&hasMedia=yes&forms=Art%20work"
-);
+currentPage = 1;
+limit = 25;
+currentQueryUrl =
+  "https://api.collection.nfsa.gov.au/search?query=&hasMedia=yes&forms=Art%20work";
+getData(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);

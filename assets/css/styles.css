@@ -244,6 +244,11 @@ main {
   color: white;
 }
 
+#moreContainer {
+  text-align: center;
+  margin-top: var(--gap-3);
+}
+
 /* REDUCING PADDING  */
 @media screen and (max-width: 600px) {
   header {
