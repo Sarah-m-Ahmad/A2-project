@@ -50,9 +50,13 @@ function displayResults(results) {
     itemContainer.innerHTML = `
           ${
             imgurl
-              ? `<div class="column-item"><img src="${imgurl}" alt="${item.title}"></div>`
-              : // THIS IS HOW YOUD DO THE SEARCH AAAAAA
-                ""
+              ? `<div class="column-item">
+            <img src="${imgurl}" alt="${item.title}">
+            <div class="image-overlay">
+              <span class="image-title">${item.title}</span>
+            </div>
+         </div>` // THIS IS HOW YOUD DO THE SEARCH AAAAAA
+              : ""
           }
       `;
 

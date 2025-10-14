@@ -1,5 +1,6 @@
 /* Import fonts */
 @import url("https://fonts.cdnfonts.com/css/sf-pro-display");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
 
 /* Define styling colours  */
 :root {
@@ -33,6 +34,21 @@ body {
   /* Stop overscrolling */
   overscroll-behavior: none;
 }
+
+/*Heading styles*/
+
+h1 {
+  font-family: "Noto Serif", serif;
+  font-weight: 700;
+  color: var(--font-main-color);
+  margin-bottom: var(--gap-4);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* ^ Responsive typography for headings */
 
 /* Header styling */
 header {
@@ -79,7 +95,7 @@ footer {
 
 /* Main styling */
 main {
-  padding: 0 var(--gap-4);
+  padding: var(--gap-4);
 }
 
 .column {
@@ -87,12 +103,72 @@ main {
   column-gap: var(--gap-1);
 }
 
-.column-item img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
+/* Responsive columns */
+@media (max-width: 1000px) {
+  .column {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .column {
+    column-count: 1; /* single column on mobile */
+  }
+}
+
+.column-item {
+  position: relative;
+  overflow: hidden;
+  break-inside: avoid;
   border-radius: 8px;
   margin-bottom: var(--gap-1);
+  width: 100%;
+
+  img {
+    display: block;
+    transition: transform 0.3s ease;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.column-item:hover img {
+  transform: scale(1.1); /* zoom 10% */
+}
+
+.image-overlay {
+  position: absolute;
+  border-radius: 8px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* 20% black fill */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* Allow hover on image */
+}
+
+.column-item:hover .image-overlay {
+  opacity: 1;
+  transform: scale(1.1);
+  transition: opacity 0.3s ease;
+}
+
+.image-title {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.5em 1em;
+  border-radius: 8px;
 }
 
 /* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) */
@@ -121,15 +197,17 @@ main {
   }
 }
 
-/* Responsive breakpoints */
-@media (max-width: 1000px) {
-  .column {
-    column-count: 3;
+/* REDUCING PADDING  */
+@media screen and (max-width: 600px) {
+  header {
+    padding: var(--gap-1) var(--gap-2);
   }
-}
 
-@media (max-width: 600px) {
-  .column {
-    column-count: 1; /* 📱 single column on mobile */
+  footer {
+    padding: var(--gap-1) var(--gap-2);
+  }
+
+  main {
+    padding: var(--gap-2);
   }
 }
