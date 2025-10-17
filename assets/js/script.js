@@ -4,22 +4,22 @@ let currentPage = 1;
 let currentQueryUrl = "";
 let limit = 25;
 
-// Intersection Observer to trigger pan effect when fully in view (GPT and Copilot assisted)
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.target.classList.contains("wide")) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          entry.target.classList.remove("paused");
-        } else {
-          entry.target.classList.add("paused");
-        }
-      }
-    });
-  },
-  { threshold: 1 }
-);
+// DISAPPPEARING HEADER
+// Code sourced from https://www.youtube.com/watch?v=JEBgqbZWYIQ&ab_channel=OnlineTutorials -> modified selector for different tag, comments added for my own clarity
+var lastScrollTop = 0;
+navbar = document.querySelector("header");
+window.addEventListener("scroll", function () {
+  var scrollTop = window.scrollY || this.document.documentElement.scrollTop;
+  if (scrollTop > lastScrollTop) {
+    navbar.style.top = "-100%"; // move header from view
+  }
+  // user is scrolling up, show header
+  else {
+    navbar.style.top = "0"; // translate header
+  }
+  // update scroll position
+  lastScrollTop = scrollTop;
+});
 
 //Overlay initially guard
 let overlayInitialized = false;
@@ -66,14 +66,14 @@ function displayResults(results, append = false) {
     const imgArr = item.preview || []; // Default to empty array
 
     // Initialize empty image URL
-    let imgurl = "";
+    let thumbnailurl = "";
 
     // Loop through the preview array to find an image
     const baseurl = "https://media.nfsacollection.net/";
     for (let i = 0; i < imgArr.length; i++) {
       console.log("Preview object:", imgArr[i]); // Log preview object
       if (imgArr[i].hasOwnProperty("thumbnailFilePath")) {
-        imgurl = baseurl + imgArr[i].thumbnailFilePath;
+        thumbnailurl = baseurl + imgArr[i].thumbnailFilePath;
         break; // Use the first valid image
       }
     }
@@ -84,11 +84,12 @@ function displayResults(results, append = false) {
     // 2. Use template literals to embed the item details in HTML
     itemContainer.innerHTML = `
           ${
-            imgurl
+            thumbnailurl
               ? `<div class="column-item" data-id="${item.id}">
-            <img src="${imgurl}" alt="${item.title}">
+            <img src="${thumbnailurl}" alt="${item.title}">
             <div class="image-overlay">
               <span class="image-title">${item.title}</span>
+            
             </div>
          </div>` // THIS IS HOW YOUD DO THE SEARCH AAAAAA
               : ""
@@ -106,67 +107,57 @@ function displayResults(results, append = false) {
       loadItemDetails(itemId);
     });
   });
-
-  // After images load, detect their aspect ratios, add classlist for crop + pan (code sourced from chatGPT + troubleshooted using Copilot)
-  const imgs = objectsContainer.querySelectorAll("img");
-
-  imgs.forEach((img) => {
-    img.addEventListener("load", () => {
-      const ratio = img.naturalWidth / img.naturalHeight;
-      if (ratio > 20) {
-        img.classList.add("wide");
-        observer.observe(img); // Observe only wide images
-      }
-    });
-  });
 }
 
 // Function to show a single item when clicked -> modified to show overlay using chatGPT
-function loadItemDetails(id) {
-  console.log("load item: " + id);
-  const apiUrl = `https://api.collection.nfsa.gov.au/title/${id}`;
 
+function loadItemDetails(id) {
   const overlay = document.getElementById("itemOverlay");
   const overlayInner = document.getElementById("overlayInner");
 
-  // Clear previous content and show loading message
+  // Find the thumbnail and title from the cachedResults
+  const record = cachedResults.find((item) => item.id == id);
+  if (!record) return;
+
+  const title = record.title || "Untitled";
+  const name = record.name || "";
+  const baseurl = "https://media.nfsacollection.net/";
+  const preview = Array.isArray(record.preview) ? record.preview : [];
+
+  let imgurl = "";
+  if (preview.length > 0 && preview[0].thumbnailFilePath) {
+    imgurl = baseurl + preview[0].thumbnailFilePath;
+  }
+
+  // Show loading state
   overlayInner.innerHTML = "<p>Loading item details...</p>";
-  overlay.classList.remove("hidden"); // Show overlay
-  requestAnimationFrame(() => {
-    overlay.classList.add("visible");
-  });
+  overlay.classList.remove("hidden");
+  requestAnimationFrame(() => overlay.classList.add("visible"));
 
-  getData(apiUrl, (item) => {
-    const title = item.title || "Untitled";
-    const name = item.name || "";
-    const preview = Array.isArray(item.preview) ? item.preview : [];
-    const imgurl =
-      preview.length > 0 && preview[0].filePath
-        ? `https://media.nfsacollection.net/${preview[0].filePath}`
-        : "";
-
-    overlayInner.innerHTML = `
-      <h2>${title}</h2>
-      <p>${name}</p>
-      ${imgurl ? `<img src="${imgurl}" alt="${title}">` : ""}
-    `;
-  });
+  // Fill overlay with content
+  overlayInner.innerHTML = `
+    <h2>${title}</h2>
+    <p>${name}</p>
+    ${
+      imgurl
+        ? `<img src="${imgurl}" alt="${title}">`
+        : "<p>No image available</p>"
+    }
+  `;
 
   const closeOverlay = () => {
     overlay.classList.remove("visible");
-    setTimeout(() => {
-      overlay.classList.add("hidden");
-    }, 300); // Match this duration with CSS transition duration
+    setTimeout(() => overlay.classList.add("hidden"), 300);
   };
 
   // Close button
-  document.getElementById("closeOverlay").addEventListener("click", () => {
-    overlay.classList.add("hidden");
-  });
+  document
+    .getElementById("closeOverlay")
+    .addEventListener("click", closeOverlay);
 
-  // Close when clicking outside the content
+  // Close when clicking outside
   overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) overlay.classList.add("hidden");
+    if (e.target === overlay) closeOverlay();
   });
 
   // Close with Escape key
@@ -177,6 +168,37 @@ function loadItemDetails(id) {
     }
   };
   document.addEventListener("keydown", handleKeyDown, { once: true });
+}
+
+// About overlay functionality
+
+const abt = document.getElementById("aboutBox");
+const abtTarget = document.getElementById("abtlink");
+const abtClose = document.getElementById("closeabt");
+const main = document.querySelector("main");
+
+function openAbt() {
+  abt.classList.remove("hide");
+  abt.classList.add("show");
+  main.classList.add("bg");
+  document.addEventListener("keydown", handleKeyDown);
+}
+
+function closeAbt() {
+  abt.classList.remove("show");
+  abt.classList.add("hide");
+  main.classList.remove("bg");
+  document.removeEventListener("keydown", handleKeyDown);
+}
+
+// open
+abtTarget.addEventListener("click", openAbt);
+
+// Close
+abtClose.addEventListener("click", closeAbt);
+
+function handleKeyDown(e) {
+  if (e.key === "Escape") closeAbt();
 }
 
 // Adds functionality to the "More button to load more results"

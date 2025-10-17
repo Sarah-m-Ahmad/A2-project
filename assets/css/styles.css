@@ -10,6 +10,7 @@
   --filter-fill: #cacfe3;
   --chip: #d6d0ff;
   --sort-text: #6148a8;
+  --link: #889aff;
   --gap-1: 0.75rem;
   --gap-2: 1rem;
   --gap-3: 1.25rem;
@@ -35,7 +36,7 @@ body {
   overscroll-behavior: none;
 }
 
-/*Heading styles*/
+/*Heading and font styles*/
 
 h1 {
   font-family: "Noto Serif", serif;
@@ -48,13 +49,18 @@ h1 {
   font-size: clamp(2.5rem, 5vw, 4rem);
 }
 
+a {
+  color: var(--link);
+}
 /* ^ Responsive typography for headings */
 
 /* Header styling */
 header {
   background-color: var(--header-footer-color);
   color: white;
-  /* position: absolute; */
+  z-index: 1000;
+  transition: top 0.3s ease;
+  position: sticky;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -67,7 +73,8 @@ header {
     align-items: center;
     gap: var(--gap-1);
   }
-  a {
+  a,
+  p {
     text-decoration: none;
     color: white;
 
@@ -171,13 +178,13 @@ main {
   border-radius: 8px;
 }
 
-/* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) */
-.wide {
+/* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) VOID - NFSA adjusted to video previews */
+/* .wide {
   aspect-ratio: 1;
   width: 100%;
   object-fit: cover;
   object-position: left; /* start at left */
-}
+/*  }
 
 .wide.in-view {
   animation: panImage 60s linear forwards;
@@ -195,7 +202,7 @@ main {
   to {
     object-position: right;
   }
-}
+} */
 
 /* Styling for item details overlay */
 
@@ -210,6 +217,7 @@ main {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: ease 0.3s;
 }
 
 .overlay.visible {
@@ -244,9 +252,83 @@ main {
   color: white;
 }
 
+/* Styling for abt */
+.about {
+  position: fixed;
+  z-index: 1001;
+  padding: var(--gap-4);
+  width: 630px;
+  color: white;
+  background-color: var(--header-footer-color);
+  display: block;
+  overflow-wrap: break-word;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+
+  button {
+    position: absolute;
+    top: var(--gap-2);
+    right: var(--gap-2);
+    background: none;
+    border: none;
+    font-size: 3rem;
+    cursor: pointer;
+    color: white;
+  }
+
+  p {
+    margin-top: var(--gap-4);
+    margin-bottom: var(--gap-2);
+  }
+}
+.about.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.about.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bg {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+@media screen and (max-width: 700px) {
+  .about {
+    width: 382px;
+  }
+}
+
+/* More button styling */
 #moreContainer {
   text-align: center;
   margin-top: var(--gap-3);
+}
+
+/* Search bar styling  */
+.search {
+  font-family: "SF Pro Display", sans-serif;
+
+  padding: var(--gap-1);
+  border: none;
+  border-radius: 24px;
+  width: 300px;
+  max-width: 100%;
+  background-color: var(--search-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input {
+  border: none;
+  background-color: var(--search-grey);
+  font-size: 1rem;
+  outline: none;
 }
 
 /* REDUCING PADDING  */

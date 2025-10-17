@@ -7,7 +7,6 @@
   <title>11841 Assessment 2</title>
   <link rel="stylesheet" href="assets/css/reset.css">
   <link rel="stylesheet" href="assets/css/styles.css">
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
   <script src="assets/js/script.js" defer></script>
 </head>
 
@@ -17,9 +16,13 @@
   <img src="assets/images/homelogo.svg" alt="home logo">
   <a href="index.html">Home</a>
   </div>
+  <div class="search">
+  <input type="search" id="searchInput" placeholder="Search the collection">
+  <img src="assets/images/searchIcon.svg" alt="search icon" id="search-icon">
+  </div>
   <nav>
     <ul>
-      <li><a href="">About</a></li>
+      <li><p id="abtlink">About</p></li>
     </ul>
   </nav>
 </header>
@@ -27,7 +30,14 @@
     <div id="moreContainer">
       <button id="moreBtn">More</button>
     </div>
-        <h1>Explore the NFSA's collection</h1>
+
+    <h1>Explore the NFSA's collection</h1>
+
+    <div class="about hide" id="aboutBox">
+      <button id="closeabt">&times;</button>
+      <p>This material was sourced from the National Film and Sound Archive, which can be viewed here:</p>
+      <a href="https://www.collection.nfsa.gov.au/search/query=&hasMedia=yes&forms=Art%20work&mediaFileTypes=Image">https://www.collection.nfsa.gov.au/search/query=&hasMedia=yes&forms=Art%20work&mediaFileTypes=Image</a>
+    </div>
 
     <div id="objectsContainer" class="column"></div>
     <!-- Overlay for item details // Sourced from GPT-->
@@ -43,7 +53,6 @@
 </div>
 
 </main>
-  <!-- Use javascript heavy approach for search box connect the submit send content of that element to search ; use form and tell it not to use its normal behaviour (to do the api request) -->
 <footer>
 <p>This project was produced by students in the Faculty of Arts & Design, University of Canberra, 2025.</p>
 </footer>
