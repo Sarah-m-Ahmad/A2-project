@@ -316,6 +316,20 @@ main {
     "f f f f";
 }
 
+@media screen and (max-width: 900px) {
+  #overlayInner {
+    grid-template-columns: 1fr; /* single column */
+
+    grid-template-areas:
+      "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f";
+  }
+}
+
 /* Styling for abt */
 .about {
   position: fixed;
