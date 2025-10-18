@@ -122,6 +122,22 @@ function loadItemDetails(id) {
   const title = record.title || "Untitled";
   const name = record.name || "";
   const summary = record.summary || "No summary available.";
+  const displayID = record.id || "";
+  const medium = record.subMedium || "Unknown medium";
+  const pd = record.productionDates[0] || {};
+  const format = record.forms || "Not available";
+  const genre = record.parentTitle.genres || [];
+  const country = record.countries || [];
+  const language = record.languages || [];
+  const credits = record.credits || [];
+
+  // courtesy of copilot
+  const productionDate =
+    pd.fromYear || pd.toYear
+      ? `${pd.fromYear || ""}${pd.fromYear && pd.toYear ? " - " : ""}${
+          pd.toYear || ""
+        }`
+      : "Unknown date";
 
   const baseurl = "https://media.nfsacollection.net/";
   const preview = Array.isArray(record.preview) ? record.preview : [];
@@ -152,14 +168,38 @@ function loadItemDetails(id) {
     </div>
 
   <div class="cellc">
+    <p>Credits:</p>
+    <ul>
+      ${
+        credits.length
+          ? credits
+              .map(
+                (credit) =>
+                  `<li><span>${credit.name}</span> — <span>${credit.role}</span></li>`
+              )
+              .join("")
+          : "<li>None</li>"
+      }
+    </ul>
   </div>
+
   <div class="celld">
+  <p><span>NSFA ID:</span><span><u>${displayID}</u></span</p>
+  <p><span>Medium:</span><span><u>${medium}</u></span></p>
+  <p><span>Production Date:</span><span><u>${productionDate}</u></span></p>
+  <p><span>Format:</span><span><u>${format}</u></span></p>
+  <p><span>Genre:</span><span><u>${genre}</u></span></p> 
+  <p><span>Country:</span><span><u>${country}</u></span></p>
+  <p><span>Language:</span><span><u>${language}</u></span></p>
   </div>
+
   <div class="celle">
   </div>
+
   <div class="cellf">
   </div>
   `;
+  // ^ id like the genre to spit out all the genres in the array, not sure how
 
   const closeOverlay = () => {
     overlay.classList.remove("visible");
