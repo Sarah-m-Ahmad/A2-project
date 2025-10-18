@@ -187,13 +187,13 @@ main {
   border-radius: 8px;
 }
 
-/* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) VOID - NFSA adjusted to video previews */
-/* .wide {
-  aspect-ratio: 1;
+/* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) */
+.wide {
+  aspect-ratio: 1.4;
   width: 100%;
   object-fit: cover;
   object-position: left; /* start at left */
-/*  }
+}
 
 .wide.in-view {
   animation: panImage 60s linear forwards;
@@ -211,7 +211,7 @@ main {
   to {
     object-position: right;
   }
-} */
+}
 
 /* Styling for item details overlay */
 
@@ -262,14 +262,85 @@ main {
   color: white;
 }
 
+/* OVERLAY CAROUSEL STUFF */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  gap: 1rem;
+
+  .item {
+    flex: 0 0 20%;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    height: 200px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 3s ease;
+    }
+  }
+
+  .item:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.arrow {
+  border: solid 2px var(--font-main-color);
+  background-color: var(--filter-fill);
+  color: var(--font-main-color);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 16px;
+
+  &:hover {
+    background: var(--font-main-color);
+    color: var(--filter-fill);
+    border: solid 2px var(--filter-fill);
+    transition: 0.3s ease;
+  }
+}
+
 /* Grid for overlay content */
 
 .cella {
+  display: flex;
+  flex-direction: column;
   grid-area: a;
+  align-items: center;
 
   img {
     width: 100%;
-    /* padding: 0 var(--gap-2); */
+    padding-bottom: var(--gap-4);
+    border-radius: 4px;
+  }
+
+  a {
+    color: var(--font-main-color);
+    padding: var(--gap-1) var(--gap-2);
+    background-color: var(--filter-fill);
+    text-decoration: none;
+    border-radius: 16px;
+    outline: var(--filter-fill) solid 2px;
+  }
+
+  a:hover {
+    color: var(--filter-fill);
+    background-color: var(--font-main-color);
+    transition: ease 0.3s;
+    outline: var(--filter-fill) solid 2px;
   }
 }
 
@@ -302,18 +373,20 @@ main {
 
 .celle {
   grid-area: e;
+  overflow-wrap: break-word;
 }
 
 #overlayInner {
+  border-radius: 8px;
   display: grid;
+  margin-bottom: var(--gap-2);
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: var(--gap-3);
   grid-template-areas:
     "a a b b"
     "a a c d"
-    "a a e e "
-    "f f f f";
+    "a a e e ";
 }
 
 @media screen and (max-width: 900px) {
@@ -390,11 +463,11 @@ main {
 /* Search bar styling  */
 .search {
   font-family: "SF Pro Display", sans-serif;
-
+  position: relative;
   padding: var(--gap-1);
   border: none;
   border-radius: 24px;
-  width: 300px;
+  width: 350px;
   max-width: 100%;
   background-color: var(--search-grey);
   display: flex;
@@ -402,13 +475,57 @@ main {
   justify-content: space-between;
 }
 
+.search form {
+  flex: 1;
+}
+
 input {
+  width: 100%;
   color: var(--font-main-color);
   border: none;
   background-color: var(--search-grey);
   font-size: 1rem;
   outline: none;
-  z-index: 1000;
+  /* z-index: 1000; */
+}
+
+#search-icon {
+  cursor: pointer;
+}
+
+/* --- MOBILE BEHAVIOUR --- */
+@media (max-width: 600px) {
+  .search {
+    width: 48px;
+    justify-content: flex-end;
+    transition: 0.3s ease;
+  }
+
+  /* Hide the search bar by default */
+  .search input {
+    position: absolute;
+    top: 125%;
+    left: -375%;
+    width: 80vw;
+    opacity: 0;
+    padding: var(--gap-2);
+    border-radius: 25px;
+
+    border: 2px solid var(--header-footer-color);
+    pointer-events: none;
+    /* transition: all 0.3s ease; */
+  }
+
+  /* When search is active (JS toggles this class) */
+  .search.active input {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  header.search-open {
+    padding-bottom: 5rem;
+    transition: 0.3s ease;
+  }
 }
 
 /* REDUCING PADDING  */

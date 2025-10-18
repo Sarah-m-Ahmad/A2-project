@@ -4,6 +4,23 @@ let currentPage = 1;
 let currentQueryUrl = "";
 let limit = 25;
 
+// Intersection Observer to trigger pan effect when fully in view (GPT and Copilot assisted)
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.target.classList.contains("wide")) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          entry.target.classList.remove("paused");
+        } else {
+          entry.target.classList.add("paused");
+        }
+      }
+    });
+  },
+  { threshold: 1 }
+);
+
 // DISAPPPEARING HEADER
 // Code sourced from https://www.youtube.com/watch?v=JEBgqbZWYIQ&ab_channel=OnlineTutorials -> modified selector for different tag, comments added for my own clarity
 var lastScrollTop = 0;
@@ -107,12 +124,25 @@ function displayResults(results, append = false) {
       loadItemDetails(itemId);
     });
   });
+
+  // After images load, detect their aspect ratios, add classlist for crop + pan (code sourced from chatGPT + troubleshooted using Copilot)
+  const imgs = objectsContainer.querySelectorAll("img");
+
+  imgs.forEach((img) => {
+    img.addEventListener("load", () => {
+      const ratio = img.naturalWidth / img.naturalHeight;
+      if (ratio > 20) {
+        img.classList.add("wide");
+        observer.observe(img); // Observe only wide images
+      }
+    });
+  });
 }
 
 // Function to show a single item when clicked -> modified to show overlay using chatGPT
+const overlay = document.getElementById("itemOverlay");
 
 function loadItemDetails(id) {
-  const overlay = document.getElementById("itemOverlay");
   const overlayInner = document.getElementById("overlayInner");
 
   // Find the thumbnail and title from the cachedResults
@@ -160,6 +190,7 @@ function loadItemDetails(id) {
       ? `<img src="${imgurl}" alt="${title}">`
       : "<p>No image available</p>"
   }
+  <a href="https://www.collection.nfsa.gov.au/title/${displayID}">Original Page</a>
   </div>  
   <div class="cellb">
   <h2>${title}</h2>
@@ -194,9 +225,7 @@ function loadItemDetails(id) {
   </div>
 
   <div class="celle">
-  </div>
-
-  <div class="cellf">
+  <p>If you find any errors in this information please let us know at <u>corrections@nfsa.gov.au</u></p>
   </div>
   `;
   // ^ id like the genre to spit out all the genres in the array, not sure how
@@ -225,6 +254,16 @@ function loadItemDetails(id) {
   };
   document.addEventListener("keydown", handleKeyDown, { once: true });
 }
+
+// Carousel stuff
+const track = overlay.querySelector(".carousel-track");
+const leftArrow = overlay.querySelector(".arrow.left");
+const rightArrow = overlay.querySelector(".arrow.right");
+
+// Simulate algorithm call returning an array of random images
+// async function fetchRandomItems(count = 5){
+//   const allItems = await fetch()
+// }
 
 // About overlay functionality
 
@@ -259,11 +298,11 @@ function handleKeyDown(e) {
 
 // Adds functionality to the "More button to load more results"
 
-document.getElementById("moreBtn").addEventListener("click", () => {
-  currentPage += 1;
-  const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
-  getData(nextUrl, null, true); // append = true
-});
+// document.getElementById("moreBtn").addEventListener("click", () => {
+//   currentPage += 1;
+//   const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
+//   getData(nextUrl, null, true); // append = true
+// });
 
 // Search button stuff -> Referenced from GPT + https://stackoverflow.com/questions/65152295/input-a-search-from-the-browser-to-an-api-get-request
 
@@ -289,10 +328,26 @@ function performSearch(query) {
 // Trigger search on icon click
 searchIcon.addEventListener("click", function (e) {
   e.preventDefault();
+
   const query = searchInput.value.trim(); // get input value without extra spaces
-  if (query !== "") {
-    console.log(query); // document query
+  // If already active and input has value, perform search
+  const isActive = searchContainer.classList.contains("active");
+
+  // if (query !== "") {
+  //   console.log(query); // document query
+  //   performSearch(query);
+  // }
+  if (isActive && query) {
     performSearch(query);
+  } else {
+    // Toggle visibility
+    searchContainer.classList.toggle("active");
+    navbar.classList.toggle("search-open");
+
+    // Focus the input when opening
+    if (searchContainer.classList.contains("active")) {
+      searchInput.focus();
+    }
   }
 });
 
@@ -303,6 +358,19 @@ form.addEventListener("submit", (e) => {
   if (query !== "") {
     console.log(query); // document query
     performSearch(query);
+  }
+});
+
+// Mobile search toggle
+const searchContainer = document.querySelector(".search");
+
+// Close search if user taps outside
+document.addEventListener("click", (e) => {
+  if (
+    !searchContainer.contains(e.target) &&
+    searchContainer.classList.contains("active")
+  ) {
+    searchContainer.classList.remove("active");
   }
 });
 
