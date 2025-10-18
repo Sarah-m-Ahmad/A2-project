@@ -121,6 +121,8 @@ function loadItemDetails(id) {
 
   const title = record.title || "Untitled";
   const name = record.name || "";
+  const summary = record.summary || "No summary available.";
+
   const baseurl = "https://media.nfsacollection.net/";
   const preview = Array.isArray(record.preview) ? record.preview : [];
 
@@ -136,13 +138,27 @@ function loadItemDetails(id) {
 
   // Fill overlay with content
   overlayInner.innerHTML = `
-    <h2>${title}</h2>
-    <p>${name}</p>
-    ${
-      imgurl
-        ? `<img src="${imgurl}" alt="${title}">`
-        : "<p>No image available</p>"
-    }
+  <div class="cella">
+  ${
+    imgurl
+      ? `<img src="${imgurl}" alt="${title}">`
+      : "<p>No image available</p>"
+  }
+  </div>  
+  <div class="cellb">
+  <h2>${title}</h2>
+    <h3>${name}</h3>
+    <p>${summary}</p>
+    </div>
+
+  <div class="cellc">
+  </div>
+  <div class="celld">
+  </div>
+  <div class="celle">
+  </div>
+  <div class="cellf">
+  </div>
   `;
 
   const closeOverlay = () => {
@@ -209,8 +225,50 @@ document.getElementById("moreBtn").addEventListener("click", () => {
   getData(nextUrl, null, true); // append = true
 });
 
+// Search button stuff -> Referenced from GPT + https://stackoverflow.com/questions/65152295/input-a-search-from-the-browser-to-an-api-get-request
+
+const searchInput = document.getElementById("searchInput");
+const searchIcon = document.getElementById("search-icon");
+const form = document.querySelector("form");
+
+const searchBaseURL =
+  "https://api.collection.nfsa.gov.au/search?&hasMedia=yes&forms=Art%20work";
+
+// Function to search
+function performSearch(query) {
+  // reset pagination
+  currentPage = 1;
+
+  // Construct the search URL
+  currentQueryUrl = `${searchBaseURL}&query=${encodeURIComponent(query)}`;
+
+  // Fetch and display results
+  getData(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);
+}
+
+// Trigger search on icon click
+searchIcon.addEventListener("click", function (e) {
+  e.preventDefault();
+  const query = searchInput.value.trim(); // get input value without extra spaces
+  if (query !== "") {
+    console.log(query); // document query
+    performSearch(query);
+  }
+});
+
+// Submit
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const query = searchInput.value.trim();
+  if (query !== "") {
+    console.log(query); // document query
+    performSearch(query);
+  }
+});
+
 currentPage = 1;
 limit = 25;
 currentQueryUrl =
-  "https://api.collection.nfsa.gov.au/search?query=&hasMedia=yes&forms=Art%20work";
+  "https://api.collection.nfsa.gov.au/search?&hasMedia=yes&forms=Art%20work";
+
 getData(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);
