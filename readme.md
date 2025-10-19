@@ -1,6 +1,6 @@
 ## Site link
 
-Link:
+Link: https://sarah-m-ahmad.github.io/A2-project/
 
 ## Rationale
 
