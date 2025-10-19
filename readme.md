@@ -38,25 +38,23 @@ Overall, I am satisfied with the final product as it provides a dynamic, respons
 
 **Word count:** 599
 
-## Resource list (annotated links)
+## Resource list
 
-[Disappearing header on scroll down] (https://www.youtube.com/watch?v=JEBgqbZWYIQ&ab_channel=OnlineTutorials)
+Alex Brandt. (2019). Stack Overflow. Stack Overflow; Stack Overflow. https://stackoverflow.com/questions/54834898/cannot-type-in-input-text-field
 
-[W3Schools - Used to understand terms and syntax given by AI] (https://www.w3schools.com/)
+House, C. (2021, May 12). CSS Grid Layout Guide | CSS-Tricks. CSS-Tricks; CSS-Tricks. https://css-tricks.com/snippets/css/complete-guide-grid/#aa-basics-browser-support
 
-[W3Schools - Understanding the HTML Input types] (https://www.w3schools.com/html/html_form_input_types.asp)
+MDN. (n.d.). MDN Web Docs. Developer.mozilla.org; MDN. Retrieved October 19, 2025, from https://developer.mozilla.org/en-US
 
-[W3Schools CSS forms] (https://www.w3schools.com/css/css_form.app)
+MDN. (2025, June 6). - SVG | MDN. MDN Web Docs; MDN. https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg
 
-[CSS tricks - Used for grid reference for overlay] (https://css-tricks.com/snippets/css/complete-guide-grid/#aa-basics-browser-support)
+Online Tutorials. (2019, June 27). Hide Header on Scroll Down Show on Scroll Up | Html CSS & Javascript. YouTube; YouTube. https://www.youtube.com/watch?v=JEBgqbZWYIQ
 
-[MDN Webdocs - Used for understanding syntax and item elements] (https://developer.mozilla.org/en-US/)
+W3Schools. (2019a). CSS Forms. W3schools.com; W3schools.com. https://www.w3schools.com/css/css_form.asp
 
-[MDN Webdocs - SVG page] (https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg)
+W3Schools. (2019b). HTML Input Types. W3schools.com; W3schools.com. https://www.w3schools.com/html/html_form_input_types.asp
 
-[Stack overflow question - Referenced for resolving issues with input] (https://stackoverflow.com/questions/54834898/cannot-type-in-input-text-field)
-
-[HTML validator] (https://validator.w3.org/)
+W3Schools. (2025). W3Schools online web tutorials. W3schools.com; W3Schools. https://www.w3schools.com/
 
 ### Gen AI Acknlowledgements
 
@@ -70,7 +68,7 @@ Uses:
 
 - Generate new code based on instructions (e.g. I want to prevent default behaviour of the input form and instead retrieve data dynamically from the API)
 
-(https://chatgpt.com/)
+OpenAI. (2025). ChatGPT (October version) [Large language model]. https://chat.openai.com/chat
 
 **Copilot**
 
@@ -80,4 +78,4 @@ Uses:
 
 - Generate new code based on prompts and modifying to suit personal needs
 
-(https://www.copilot.com/)
+Microsoft. (2025). Copilot (October version) [Large Language Model]. https://copilot.microsoft.com/
