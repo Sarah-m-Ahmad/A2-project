@@ -31,7 +31,21 @@
 <main>
 <div class="container">
     <h1>Explore the NFSA's collection</h1>
-      <div id="resultcount"></div>
+    <div class="displayinfo">
+       <div id="resultcount"></div>
+
+  <form id="sortForm">
+    <label for="sortSelect">Sort</label>
+      <select id="sortSelect">
+        <option value="default">Default</option>
+        <option value="name-asc">Name A-Z</option>
+        <option value="name-desc">Name Z-A</option>
+        <option value="date-asc">Date: Oldest</option>
+        <option value="date-desc">Date: Newest</option>
+      </select>
+  </form>
+
+    </div>
 
     <div class="about hide" id="aboutBox">
       <button id="closeabt">&times;</button>

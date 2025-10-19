@@ -384,6 +384,43 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// Sort code
+
+const sortSelect = document.getElementById("sortSelect");
+
+sortSelect.addEventListener("change", () => {
+  const value = sortSelect.value;
+
+  let sortedResults = [...cachedResults]; // copy to avoid mutating original
+
+  switch (value) {
+    case "name-asc":
+      sortedResults.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case "name-desc":
+      sortedResults.sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case "date-asc":
+      sortedResults.sort((a, b) => {
+        const aYear = a.productionDates?.[0]?.fromYear || 0;
+        const bYear = b.productionDates?.[0]?.fromYear || 0;
+        return aYear - bYear;
+      });
+      break;
+    case "date-desc":
+      sortedResults.sort((a, b) => {
+        const aYear = a.productionDates?.[0]?.fromYear || 0;
+        const bYear = b.productionDates?.[0]?.fromYear || 0;
+        return bYear - aYear;
+      });
+      break;
+    default:
+      sortedResults = [...cachedResults]; // reset to original
+  }
+
+  displayResults(sortedResults, false, sortedResults.length);
+});
+
 currentPage = 1;
 limit = 25;
 currentQueryUrl =
