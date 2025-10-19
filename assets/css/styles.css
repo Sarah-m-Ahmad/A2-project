@@ -23,21 +23,28 @@
   --zoom-scale: 1.1;
 }
 
-/* Establish font size for responsiveness */
+/* box sizing only */
 * {
-  font-size: 18px;
   box-sizing: border-box;
 }
 
+/* Ensure Safari / iOS do not auto-scale text and rem basis is consistent */
 html {
   height: 100%;
+  font-size: 18px;
+
   scroll-behavior: smooth;
+  --webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
-  font-family: "SF Pro Display", sans-serif;
+  font-family: "SF Pro Display", sans-serif, -apple-system, BlinkMacSystemFont;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: var(--font-main-color);
   display: flex;
+  font-size: 1rem;
   flex-direction: column;
   /* Stop overscrolling */
   overscroll-behavior: none;
