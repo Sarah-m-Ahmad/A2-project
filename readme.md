@@ -2,7 +2,7 @@
 
 Link:
 
-## Reflection
+## Rationale
 
 During this project, I learned how to develop a dynamic website using the NSFA API, and while I heavily relied on Generative AI (See Resource list), I expanded my knowledge of JavaScript and API handling.
 
