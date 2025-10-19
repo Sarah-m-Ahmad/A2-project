@@ -112,7 +112,7 @@ function displayResults(results, append = false, totalResults = 0) {
     itemContainer.innerHTML = `
           ${
             thumbnailurl
-              ? `<div class="column-item" data-id="${item.id}">
+              ? `<div class="column-item slide-in" data-id="${item.id}">
             <img src="${thumbnailurl}" alt="${item.title}">
             <div class="image-overlay">
               <span class="image-title">${item.title}</span>
