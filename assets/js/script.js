@@ -49,10 +49,12 @@ function getData(url, callback, append = false) {
       return response.json();
     })
     .then((data) => {
+      const totalResults = data.meta?.count?.total || 0;
+
       if (callback) {
         callback(data);
       } else {
-        displayResults(data.results, append);
+        displayResults(data.results, append, totalResults);
       }
     })
     .catch((error) => {
@@ -65,15 +67,23 @@ function getData(url, callback, append = false) {
 
 // Function to display API results
 
-function displayResults(results, append = false) {
+function displayResults(results, append = false, totalResults = 0) {
   const objectsContainer = document.getElementById("objectsContainer"); // Ensure this exists in HTML
 
   // Handle cache + clear
   if (!append) {
     cachedResults = results; // Save current list so we can return to it
-    document.getElementById("objectsContainer").innerHTML = ""; // Clear if not appending
+    objectsContainer.innerHTML = ""; // Clear if not appending
   } else {
     cachedResults = cachedResults.concat(results); // Append new results to cache
+  }
+
+  // Update Showing 1 - x of x results" text
+  const resultsInfo = document.getElementById("resultcount");
+  if (resultsInfo) {
+    const startIndex = (currentPage - 1) * limit + 1;
+    const endIndex = startIndex + results.length - 1;
+    resultsInfo.textContent = `Showing ${startIndex} – ${endIndex} of ${totalResults} results`;
   }
 
   results.forEach((item) => {
@@ -156,7 +166,7 @@ function loadItemDetails(id) {
   const medium = record.subMedium || "Unknown medium";
   const pd = record.productionDates[0] || {};
   const format = record.forms || "Not available";
-  const genre = record.parentTitle.genres || [];
+  const genre = record.parentTitle?.genres || [];
   const country = record.countries || [];
   const language = record.languages || [];
   const credits = record.credits || [];
@@ -298,11 +308,11 @@ function handleKeyDown(e) {
 
 // Adds functionality to the "More button to load more results"
 
-// document.getElementById("moreBtn").addEventListener("click", () => {
-//   currentPage += 1;
-//   const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
-//   getData(nextUrl, null, true); // append = true
-// });
+document.getElementById("moreBtn").addEventListener("click", () => {
+  currentPage += 1;
+  const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
+  getData(nextUrl, null, true); // append = true
+});
 
 // Search button stuff -> Referenced from GPT + https://stackoverflow.com/questions/65152295/input-a-search-from-the-browser-to-an-api-get-request
 

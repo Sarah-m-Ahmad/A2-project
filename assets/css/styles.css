@@ -15,6 +15,12 @@
   --gap-2: 1rem;
   --gap-3: 1.25rem;
   --gap-4: 2rem;
+
+  /* DRY variables */
+  --radius: 16px;
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+  --transition: 0.3s ease;
+  --zoom-scale: 1.1;
 }
 
 /* Establish font size for responsiveness */
@@ -68,7 +74,7 @@ header {
   background-color: var(--header-footer-color);
   color: white;
   z-index: 1000;
-  transition: top 0.3s ease;
+  transition: top var(--transition);
   position: sticky;
   width: 100%;
   display: flex;
@@ -76,37 +82,38 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: var(--gap-3) var(--gap-4);
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-1);
-  }
-  a,
-  p {
-    text-decoration: none;
-    color: white;
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-1);
+}
 
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+header a,
+header p {
+  text-decoration: none;
+  color: white;
+}
+
+header a:hover,
+header p:hover {
+  text-decoration: underline;
 }
 
 /* Footer styling */
-
 footer {
   background-color: var(--header-footer-color);
   color: white;
   width: 100%;
   padding: var(--gap-3) var(--gap-4);
+}
 
-  p {
-    padding-left: var(--gap-2);
-    border-left-style: solid;
-    border-left-width: 2px;
-    border-left-color: white;
-  }
+footer p {
+  padding-left: var(--gap-2);
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: white;
 }
 
 /* Main styling */
@@ -132,59 +139,63 @@ main {
   }
 }
 
+/* Image frames (wrapper) */
 .column-item {
   position: relative;
   overflow: hidden;
   break-inside: avoid;
-  border-radius: 8px;
+  border-radius: var(--radius);
   margin-bottom: var(--gap-1);
   width: 100%;
-
-  img {
-    display: block;
-    transition: transform 0.3s ease;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  &:hover img {
-    transform: scale(1.1);
-  }
 }
 
-.column-item:hover img {
-  transform: scale(1.1); /* zoom 10% */
+/* Image visuals (shared rules for grid images & carousel thumbnails) */
+.column-item img,
+.carousel-track .item img {
+  display: block;
+  transition: transform var(--transition);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0; /* keep rounding on wrapper */
+  will-change: transform;
 }
 
+/* Zoom only the image, clipped by wrapper (applies to both column and carousel hover) */
+.column-item:hover img,
+.carousel-track .item:hover img {
+  transform: scale(var(--zoom-scale));
+}
+
+/* Overlay that sits above images */
 .image-overlay {
   position: absolute;
-  border-radius: 8px;
+  border-radius: var(--radius);
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* 20% black fill */
+  background: var(--overlay-bg); /* 20% black fill */
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition);
   pointer-events: none; /* Allow hover on image */
 }
 
 .column-item:hover .image-overlay {
   opacity: 1;
-  transform: scale(1.1);
-  transition: opacity 0.3s ease;
 }
 
+/* Title inside overlay */
 .image-title {
   color: #fff;
   font-size: 1.2em;
   font-weight: bold;
   text-align: center;
   padding: 0.5em 1em;
-  border-radius: 8px;
+  border-radius: var(--radius);
 }
 
 /* Crop images exceeding a certain aspect ratio (i.e. Animation thumbnails) */
@@ -214,19 +225,17 @@ main {
 }
 
 /* Styling for item details overlay */
-
 .overlay {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  transition: opacity 0.3s ease;
+  background: var(--overlay-bg);
+  transition: opacity var(--transition);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: ease 0.3s;
 }
 
 .overlay.visible {
@@ -247,14 +256,14 @@ main {
   width: 90%;
   max-height: 90%;
   overflow-y: auto;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition);
 }
 
 /* X styling */
 #closeOverlay {
   position: absolute;
-  top: var(--gap-2);
-  right: var(--gap-2);
+  top: var(--gap-1);
+  right: var(--gap-1);
   background: none;
   border: none;
   font-size: 3rem;
@@ -275,27 +284,19 @@ main {
   overflow: hidden;
   width: 100%;
   gap: 1rem;
-
-  .item {
-    flex: 0 0 20%;
-    border-radius: 4px;
-    position: relative;
-    cursor: pointer;
-    height: 200px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 3s ease;
-    }
-  }
-
-  .item:hover img {
-    transform: scale(1.1);
-  }
 }
 
+.carousel-track .item {
+  flex: 0 0 20%;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  height: 200px;
+}
+
+/* Carousel hover handled by shared image hover rule above */
+
+/* Arrow styling */
 .arrow {
   border: solid 2px var(--font-main-color);
   background-color: var(--filter-fill);
@@ -304,44 +305,44 @@ main {
   cursor: pointer;
   padding: 1rem;
   border-radius: 16px;
+  transition: background var(--transition), color var(--transition),
+    border var(--transition);
+}
 
-  &:hover {
-    background: var(--font-main-color);
-    color: var(--filter-fill);
-    border: solid 2px var(--filter-fill);
-    transition: 0.3s ease;
-  }
+.arrow:hover {
+  background: var(--font-main-color);
+  color: var(--filter-fill);
+  border: solid 2px var(--filter-fill);
 }
 
 /* Grid for overlay content */
-
 .cella {
   display: flex;
   flex-direction: column;
   grid-area: a;
   align-items: center;
+}
 
-  img {
-    width: 100%;
-    padding-bottom: var(--gap-4);
-    border-radius: 4px;
-  }
+.cella img {
+  width: 100%;
+  padding-bottom: var(--gap-4);
+  border-radius: 4px;
+}
 
-  a {
-    color: var(--font-main-color);
-    padding: var(--gap-1) var(--gap-2);
-    background-color: var(--filter-fill);
-    text-decoration: none;
-    border-radius: 16px;
-    outline: var(--filter-fill) solid 2px;
-  }
+.cella a {
+  color: var(--font-main-color);
+  padding: var(--gap-1) var(--gap-2);
+  background-color: var(--filter-fill);
+  text-decoration: none;
+  border-radius: 16px;
+  outline: var(--filter-fill) solid 2px;
+}
 
-  a:hover {
-    color: var(--filter-fill);
-    background-color: var(--font-main-color);
-    transition: ease 0.3s;
-    outline: var(--filter-fill) solid 2px;
-  }
+.cella a:hover {
+  color: var(--filter-fill);
+  background-color: var(--font-main-color);
+  transition: ease 0.3s;
+  outline: var(--filter-fill) solid 2px;
 }
 
 .cellb {
@@ -350,25 +351,25 @@ main {
 
 .cellc {
   grid-area: c;
+}
 
-  p,
-  ul {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    margin-bottom: var(--gap-1);
-    gap: var(--gap-1);
-  }
+.cellc p,
+.cellc ul {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: var(--gap-1);
+  gap: var(--gap-1);
 }
 
 .celld {
   grid-area: d;
+}
 
-  p {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--gap-1);
-  }
+.celld p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--gap-1);
 }
 
 .celle {
@@ -377,9 +378,8 @@ main {
 }
 
 #overlayInner {
-  border-radius: 8px;
+  border-radius: var(--radius);
   display: grid;
-  margin-bottom: var(--gap-2);
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: var(--gap-3);
@@ -389,10 +389,13 @@ main {
     "a a e e ";
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 768px) {
   #overlayInner {
+    margin-top: var(--gap-4);
+    position: relative;
     grid-template-columns: 1fr; /* single column */
-
+    margin-bottom: 0; /* ensure no gap below */
+    padding-bottom: 0; /* remove padding pushing gradient up */
     grid-template-areas:
       "a"
       "b"
@@ -400,6 +403,27 @@ main {
       "d"
       "e"
       "f";
+  }
+
+  /* Gradient on mobile to show more content, after used to add stuff w/ out affecting html structure */
+
+  #overlayInner::after {
+    content: "";
+    position: sticky;
+    bottom: -6%;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--header-footer-color)
+    );
+    pointer-events: none; /* Doesn't block clicks*/
+    display: block;
+    margin-top: auto;
   }
 }
 
@@ -416,24 +440,25 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease;
-
-  button {
-    position: absolute;
-    top: var(--gap-2);
-    right: var(--gap-2);
-    background: none;
-    border: none;
-    font-size: 3rem;
-    cursor: pointer;
-    color: white;
-  }
-
-  p {
-    margin-top: var(--gap-4);
-    margin-bottom: var(--gap-2);
-  }
+  transition: opacity var(--transition);
 }
+
+.about button {
+  position: absolute;
+  top: var(--gap-2);
+  right: var(--gap-2);
+  background: none;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  color: white;
+}
+
+.about p {
+  margin-top: var(--gap-4);
+  margin-bottom: var(--gap-2);
+}
+
 .about.hide {
   opacity: 0;
   pointer-events: none;
@@ -448,6 +473,7 @@ main {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+/* Responsive about */
 @media screen and (max-width: 700px) {
   .about {
     width: 382px;
@@ -458,6 +484,25 @@ main {
 #moreContainer {
   text-align: center;
   margin-top: var(--gap-3);
+}
+
+#moreBtn {
+  padding: var(--gap-1) var(--gap-4);
+  border-radius: var(--radius);
+  border: 2px solid var(--font-main-color);
+  background-color: var(--chip);
+  transition: 0.3s ease;
+}
+
+#moreBtn:hover {
+  border: 2px solid var(--chip);
+  color: var(--chip);
+  background-color: var(--font-main-color);
+}
+
+/* Results stuff */
+#resultcount {
+  padding-bottom: var(--gap-2);
 }
 
 /* Search bar styling  */
@@ -498,7 +543,7 @@ input {
   .search {
     width: 48px;
     justify-content: flex-end;
-    transition: 0.3s ease;
+    transition: var(--transition);
   }
 
   /* Hide the search bar by default */
@@ -510,10 +555,8 @@ input {
     opacity: 0;
     padding: var(--gap-2);
     border-radius: 25px;
-
     border: 2px solid var(--header-footer-color);
     pointer-events: none;
-    /* transition: all 0.3s ease; */
   }
 
   /* When search is active (JS toggles this class) */
@@ -524,7 +567,7 @@ input {
 
   header.search-open {
     padding-bottom: 5rem;
-    transition: 0.3s ease;
+    transition: var(--transition);
   }
 }
 
