@@ -18,7 +18,7 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 1 }
+  { threshold: 0.5 }
 );
 
 // DISAPPPEARING HEADER
@@ -141,7 +141,7 @@ function displayResults(results, append = false, totalResults = 0) {
   imgs.forEach((img) => {
     img.addEventListener("load", () => {
       const ratio = img.naturalWidth / img.naturalHeight;
-      if (ratio > 20) {
+      if (ratio > 5) {
         img.classList.add("wide");
         observer.observe(img); // Observe only wide images
       }
