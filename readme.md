@@ -22,7 +22,7 @@ There were some difficulties in ensuring the site was responsive, especially for
 
 **Changes to prototype**
 
-- **Scrapped filter feature:**
+- **Scrapped filter feature**
 
   Although the filter option would have been an effective way to further refine queries, there were few relevant options given the scope of my project. Furthermore, making the filter feature responsive on mobile would have been difficult, as it would have also needed to accommodate whether the search bar was active or not. To maintain some ability to refine a query, I included the sort feature.
 
